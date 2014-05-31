@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ilove</string>
+    <string name="title_section1">Inspirational Quotes</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_about">About</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="quotes">
+        <item>Each act of kindness changes the world.</item>
+        <item>We weave the fabric of life with each heartbeat.</item>
+        <item>We paint with our heart onto the canvas of life.</item>
+
+        <!-- <item>Life may be complex, yet with the awareness of love it is never complicated.</item> -->
+        <!-- <item>When we are in our mind we exclude our heart; when we are in our heart we include our mind.</item> -->
+        <!-- <item>If we can dream it, we can build it, and if we use love, all life will benefit.</item> -->
+        <!-- <item>As spiritual beings having a human experience, we are all connected in the web of life.</item> -->
+        <!-- <item>Within our true nature lies our divinity and in that divine essence is where we find and express love.</item> -->
+        <!-- <item>When we invoke love, we forgive and release the appearances of our experiences.</item> -->
+        <!-- <item>Love is experienced when it is shared with others unconditionally.</item> -->
+
+    </string-array>
+
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>
