@@ -2,6 +2,7 @@ package com.avadio.android.ilove.app;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -39,19 +43,23 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
     private Cursor mCursor;
     private TextView mQuoteText;
 
+    Animation mAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        getSupportLoaderManager().initLoader(0, null, HomeActivity.this);
 
         // Run background task to load data into SQLite Database
-        LoadQuotesTask loadQuotesTask = new LoadQuotesTask();
-        loadQuotesTask.execute();
+//        LoadQuotesTask loadQuotesTask = new LoadQuotesTask();
+//        loadQuotesTask.execute();
     }
 
 
@@ -68,8 +76,8 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_about) {
+            startActivity(new Intent(this, AboutUsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -114,7 +122,13 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
             int idIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
 
             String quote = mCursor.getString(idIndex);
+
+//            mAnimation = AnimationUtils.loadAnimation(this, R.anim.translate);
+//            mQuoteText.startAnimation(mAnimation);
+
             mQuoteText.setText(quote);
+
+            mQuoteText.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));
         }
     }
 

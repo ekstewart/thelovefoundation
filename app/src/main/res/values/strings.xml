@@ -26,7 +26,14 @@
 
     </string-array>
 
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_home">Inspirational Quotes</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_about_us">Vision and Mission</string>
+    <string name="vision">The Love Foundation is a global nonprofit organization with the mission of inspiring people to love unconditionally. Our vision is to assist people by building a practical foundation and understanding of unconditional love within individuals and society as a whole.\n\n
+Our programs further the awareness and application of unconditional love through education, research, and charity. Our intention is to explore a variety of creative activities and presentations that enhance unity and self-conscious expression while promoting love and respect to all aspects of life.
+    \n\nWe thank you for your kind support.
+\n100% of your contributions go to supporting our programs.\n
+    </string>
+    <string name="title_activity_donate">Donate</string>
 
 </resources>
