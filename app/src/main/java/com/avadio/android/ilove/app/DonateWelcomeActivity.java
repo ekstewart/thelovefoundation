@@ -1,17 +1,31 @@
 package com.avadio.android.ilove.app;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 
 
 public class DonateWelcomeActivity extends ActionBarActivity {
+
+    private ImageButton donateButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate_welcome);
+
+        donateButton = (ImageButton) findViewById(R.id.donate_button);
+        donateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonateWelcomeActivity.this, DonateActivity.class));
+            }
+        });
+
     }
 
 

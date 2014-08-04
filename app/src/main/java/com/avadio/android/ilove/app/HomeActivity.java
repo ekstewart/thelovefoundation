@@ -13,8 +13,10 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,6 +44,7 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
 
     private Cursor mCursor;
     private TextView mQuoteText;
+    private ShareActionProvider mShareActionProvider;
 
     Animation mAnimation;
 
@@ -67,7 +70,29 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
-        return true;
+
+        // Set up ShareActionProvider's default share intent
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider)
+                MenuItemCompat.getActionProvider(shareItem);
+        mShareActionProvider.setShareIntent(getDefaultIntent());
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * Defines a default (dummy) share intent to initialize the action provider.
+     * However, as soon as the actual content to be used in the intent
+     * is known or changes, you must update the share intent by again calling
+     * mShareActionProvider.setShareIntent()
+     */
+    private Intent getDefaultIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/*");
+//        intent.putExtra(Intent.EXTRA_TEXT, mQuoteText.getText());
+        intent.putExtra(Intent.EXTRA_TEXT, "Test shareIntent");
+
+        return intent;
     }
 
     @Override
@@ -78,6 +103,9 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
         int id = item.getItemId();
         if (id == R.id.action_about) {
             startActivity(new Intent(this, AboutUsActivity.class));
+        }
+        if (id == R.id.action_donate) {
+            startActivity(new Intent(this, DonateWelcomeActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -129,6 +157,9 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
             mQuoteText.setText(quote);
 
             mQuoteText.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));
+
+            // Update share provider content
+            mShareActionProvider.setShareIntent(getDefaultIntent());
         }
     }
 
