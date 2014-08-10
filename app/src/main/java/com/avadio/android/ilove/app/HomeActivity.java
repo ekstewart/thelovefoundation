@@ -34,6 +34,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 import database.MyContentProvider;
 import datamodel.QUOTESTABLE;
@@ -60,6 +61,7 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
         }
         getSupportLoaderManager().initLoader(0, null, HomeActivity.this);
 
+        //TODO:  Don't change quote on back
         // Run background task to load data into SQLite Database
 //        LoadQuotesTask loadQuotesTask = new LoadQuotesTask();
 //        loadQuotesTask.execute();
@@ -89,8 +91,9 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
     private Intent getDefaultIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/*");
-//        intent.putExtra(Intent.EXTRA_TEXT, mQuoteText.getText());
-        intent.putExtra(Intent.EXTRA_TEXT, "Test shareIntent");
+        intent.putExtra(Intent.EXTRA_TEXT, mQuoteText.getText() == null ? "" : mQuoteText.getText());
+//        intent.putExtra(Intent.EXTRA_TEXT, "Test shareIntent");
+        //TODO:  format shared quote
 
         return intent;
     }
@@ -129,7 +132,11 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
 
         // Read from cursor
         if (mCursor != null && mCursor.getCount() > 0) {
-            mCursor.moveToFirst();
+//            mCursor.moveToFirst();
+            // Move to random row
+            int row = randInt(0, mCursor.getCount());
+            mCursor.moveToPosition(row);
+
             int idIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
 
             String quote = mCursor.getString(idIndex);
@@ -234,5 +241,28 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
         contentValues.put("author", "Harold B. Becker");
 
         return getContentResolver().insert(MyContentProvider.CONTENT_URI, contentValues);
+    }
+
+    /**
+     * Returns a pseudo-random number between min and max, inclusive.
+     * The difference between min and max can be at most
+     * <code>Integer.MAX_VALUE - 1</code>.
+     *
+     * @param min Minimum value
+     * @param max Maximum value.  Must be greater than min.
+     * @return Integer between min and max, inclusive.
+     * @see java.util.Random#nextInt(int)
+     */
+    public static int randInt(int min, int max) {
+
+        // NOTE: Usually this should be a field rather than a method
+        // variable so that it is not re-seeded every call.
+        Random rand = new Random();
+
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        return randomNum;
     }
 }

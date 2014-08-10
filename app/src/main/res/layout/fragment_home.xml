@@ -9,7 +9,9 @@
     tools:context="com.avadio.android.ilove.app.HomeActivity$PlaceholderFragment">
 
     <TextView
+        android:padding="20dp"
         android:text="@string/hello_world"
+        android:textAlignment="center"
         android:gravity="center_vertical"
         android:id="@+id/quote"
         android:background="@drawable/inspiringlove_app_background_blue_hearts_burst"
