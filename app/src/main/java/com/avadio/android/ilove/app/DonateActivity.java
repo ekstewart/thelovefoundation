@@ -25,8 +25,7 @@ public class DonateActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        String url = "https://www.paypal.com/cgi-bin/webscr";
 //        String postData = "cmd=_s-xclick&hosted_button_id=A5WY2NLZFUMPG";
@@ -56,6 +55,9 @@ public class DonateActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == android.R.id.home) {
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

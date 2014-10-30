@@ -17,6 +17,7 @@ public class DonateWelcomeActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate_welcome);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         donateButton = (ImageButton) findViewById(R.id.donate_button);
         donateButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,9 @@ public class DonateWelcomeActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == android.R.id.home) {
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

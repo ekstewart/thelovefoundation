@@ -1,34 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.avadio.android.ilove.app" >
+    package="com.avadio.android.ilove.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
         android:name=".MyApplication"
+        android:debuggable="false"
         android:allowBackup="true"
         android:icon="@drawable/inspiringlove_app_icon_heart"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/Theme.AppCompat.Light">
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:screenOrientation="portrait"
-            android:icon="@drawable/the_love_foundation_square_arial_400x400"
-            android:label="@string/app_name" >
+            android:label="@string/title_activity_home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".HomeActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_home" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
         </activity>
 
         <provider
@@ -40,28 +30,14 @@
         <activity
             android:name=".AboutUsActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_about_us"
-            android:parentActivityName=".HomeActivity" >
-
-            <!-- Parent activity meta-data to support API level 7+ -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AboutUsActivity" />
-        </activity>
+            android:label="@string/title_activity_about_us" />
         <activity
             android:name=".DonateActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_donate"
-            android:parentActivityName=".AboutUsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity" />
-        </activity>
+            android:label="@string/title_activity_donate" />
         <activity
             android:name=".DonateWelcomeActivity"
-            android:label="@string/title_activity_donate_welcome"
-            android:parentActivityName=".HomeActivity">
-        </activity>
+            android:label="@string/title_activity_donate_welcome" />
     </application>
 
 </manifest>

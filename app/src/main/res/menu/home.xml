@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.avadio.android.ilove.app.HomeActivity">
 
-
     <item
         android:id="@+id/action_donate"
         android:title="@string/action_donate"

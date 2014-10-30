@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
@@ -13,10 +13,10 @@ import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
@@ -26,14 +26,7 @@ import database.MyContentProvider;
 import datamodel.QUOTESTABLE;
 
 
-public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
-    private static final String TAG = HomeActivity.class.getSimpleName();
-
-    private Cursor mCursor;
-    private TextView mQuoteText;
-    private ShareActionProvider mShareActionProvider;
-
-//    Animation mAnimation;
+public class HomeActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,127 +37,23 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
-
-            //TODO:  Don't change quote on back
-            getSupportLoaderManager().initLoader(0, null, HomeActivity.this);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putString("quote", mQuoteText.getText().toString());
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-
-        // Set up ShareActionProvider's default share intent
-        MenuItem shareItem = menu.findItem(R.id.action_share);
-        mShareActionProvider = (ShareActionProvider)
-                MenuItemCompat.getActionProvider(shareItem);
-        mShareActionProvider.setShareIntent(getDefaultIntent());
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * Defines a default (dummy) share intent to initialize the action provider.
-     * However, as soon as the actual content to be used in the intent
-     * is known or changes, you must update the share intent by again calling
-     * mShareActionProvider.setShareIntent()
-     */
-    private Intent getDefaultIntent() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/*");
-        intent.putExtra(Intent.EXTRA_TEXT, mQuoteText == null ? "Temp" : mQuoteText.getText() + "\nBy: Harold B. Becker");
-//        intent.putExtra(Intent.EXTRA_TEXT, "Test shareIntent");
-        //TODO:  format shared quote
-
-        return intent;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_about) {
-            startActivity(new Intent(this, AboutUsActivity.class));
-        }
-        if (id == R.id.action_donate) {
-            startActivity(new Intent(this, DonateWelcomeActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {QUOTESTABLE.COL_ID, QUOTESTABLE.COL_QUOTE};
-        return new CursorLoader(
-                this,
-                MyContentProvider.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(TAG, "Number of quotes loaded = " + data.getCount());
-        mCursor = data;
-
-        // Read from cursor
-        if (mCursor != null && mCursor.getCount() > 0) {
-//            mCursor.moveToFirst();
-            // Move cursor to a random position
-            int row = randInt(0, mCursor.getCount());
-            mCursor.moveToPosition(row);
-
-            int idIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
-
-            String quote = mCursor.getString(idIndex);
-
-            mQuoteText = (TextView) findViewById(R.id.quote);
-            mQuoteText.setText(quote);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // Delete reference
-    }
-
-    public void OnTextClick(View view) {
-        if (mCursor != null && mCursor.getCount() > 0) {
-//            mCursor.moveToNext();
-            // Move cursor to a random position
-            int row = randInt(0, mCursor.getCount() -1);
-            mCursor.moveToPosition(row);
-            int idIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
-
-            String quote = mCursor.getString(idIndex);
-
-//            mAnimation = AnimationUtils.loadAnimation(this, R.anim.translate);
-//            mQuoteText.startAnimation(mAnimation);
-
-            mQuoteText.setText(quote);
-
-            mQuoteText.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));
-
-            // Update share provider content
-            mShareActionProvider.setShareIntent(getDefaultIntent());
-        }
     }
 
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+        private static final String TAG = PlaceholderFragment.class.getSimpleName();
+
+        private Cursor mCursor;
+        private int mIndex = -1;
+        private TextView mQuoteText;
+        private ShareActionProvider mShareActionProvider;
 
         public PlaceholderFragment() {
         }
@@ -172,84 +61,179 @@ public class HomeActivity extends ActionBarActivity implements LoaderCallbacks<C
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_home, container, false);
+            View root = inflater.inflate(R.layout.fragment_home, container, false);
+            mQuoteText = (TextView) root.findViewById(R.id.quote);
+
+            mQuoteText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mCursor != null && mCursor.getCount() > 0) {
+                        // Move cursor to a random position
+                        mIndex = randInt(0, mCursor.getCount() - 1);
+                        mCursor.moveToPosition(mIndex);
+                        int columnIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
+
+                        String quote = mCursor.getString(columnIndex);
+                        mQuoteText.setText(quote);
+                        mQuoteText.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
+
+                        // Update share provider content
+                        mShareActionProvider.setShareIntent(getDefaultIntent());
+                    }
+                }
+            });
+
+            if (mCursor != null && mIndex != -1) {
+                mCursor.moveToPosition(mIndex);
+                int columnIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
+
+                String quote = mCursor.getString(columnIndex);
+                mQuoteText.setText(quote);
+                mQuoteText.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.slide_in_left));
+
+                // Update share provider content
+                mShareActionProvider.setShareIntent(getDefaultIntent());
+            }
+            return root;
         }
-    }
 
-    /* Use asyn task to load entries to the sqlite database */
-//    private class LoadQuotesTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        public Void doInBackground(Void... params) {
-//
-//            try {
-//                loadQuotes();
-//            } catch (IOException e) {
-//                Log.e(TAG, e.getMessage());
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        public void onPostExecute(Void param) {
-//            super.onPostExecute(param);
-//
-//            // Update UI
-//            getSupportLoaderManager().initLoader(0, null, HomeActivity.this);
-//        }
-//    }
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
 
+            // Get the cursor object from retain fragment
+            final RetainFragment mRetainFragment = RetainFragment.findOrCreateRetainFragment(this
+                    .getFragmentManager());
 
-    /* Load quots from raw text file */
-//    private void loadQuotes() throws IOException {
-//        final Resources resources = getResources();
-//        InputStream inputStream = resources.openRawResource(R.raw.quotes);
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//
-//        try {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                //String[] strings = TextUtils.sp
-//
-//                Uri uri;
-//                if (!line.equals("") && !line.startsWith("Quotes by")) {
-//                    uri = addQuote(line.trim());
-//                    if (uri.getLastPathSegment().equals("")) {
-//                        Log.e(TAG, "unable to add quote: " + line.trim());
-//                    }
-//                }
-//            }
-//        } finally {
-//            reader.close();
-//        }
-//
-//    }
+            Cursor cursor = (Cursor) mRetainFragment.getObject();
 
-    /* Insert quote to SQLite database */
-//    public Uri addQuote(String quote) {
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put("quote", quote);
-//        contentValues.put("author", "Harold B. Becker");
+            if (cursor != null) {
+                mCursor = cursor;
+                mIndex = mRetainFragment.getIndex();
+            } else {
+                this.getActivity().getSupportLoaderManager().initLoader(0, null, this);
+            }
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            inflater.inflate(R.menu.home, menu);
+
+            // Set up ShareActionProvider's default share intent
+            MenuItem shareItem = menu.findItem(R.id.action_share);
+            mShareActionProvider = (ShareActionProvider)
+                    MenuItemCompat.getActionProvider(shareItem);
+            mShareActionProvider.setShareIntent(getDefaultIntent());
+
+            super.onCreateOptionsMenu(menu, inflater);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            int id = item.getItemId();
+            if (id == R.id.action_about) {
+                startActivity(new Intent(this.getActivity(), AboutUsActivity.class));
+            }
+            if (id == R.id.action_donate) {
+                startActivity(new Intent(this.getActivity(), DonateWelcomeActivity.class));
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            // Save the current quote index
+//            SharedPreferences prefs = this.getActivity().getSharedPreferences(
+//                    "com.avadio.android.ilove.app", Context.MODE_PRIVATE);
 //
-//        return getContentResolver().insert(MyContentProvider.CONTENT_URI, contentValues);
-//    }
+//            prefs.edit().putString("quote-text", mQuoteText.getText().toString());
+//            prefs.edit().commit();
 
-    /**
-     * Returns a pseudo-random number between min and max, inclusive.
-     * The difference between min and max can be at most
-     * <code>Integer.MAX_VALUE - 1</code>.
-     *
-     * @param min Minimum value
-     * @param max Maximum value.  Must be greater than min.
-     * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
-     */
-    public static int randInt(int min, int max) {
-        // NOTE: Usually this should be a field rather than a method
-        // variable so that it is not re-seeded every call.
-        Random rand = new Random();
+            // Save the data object to the retain fragment to handle orientation change
+            final RetainFragment mRetainFragment = RetainFragment.findOrCreateRetainFragment(this
+                    .getFragmentManager());
 
-        // nextInt is normally exclusive of the top value,
-        // so add 1 to make it inclusive
-        return rand.nextInt((max - min) + 1) + min;
+            mRetainFragment.setObject(mCursor);
+            mRetainFragment.setIndex(mIndex);
+        }
+
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String[] projection = {QUOTESTABLE.COL_ID, QUOTESTABLE.COL_QUOTE};
+            return new CursorLoader(
+                    this.getActivity(),
+                    MyContentProvider.CONTENT_URI,
+                    projection,
+                    null,
+                    null,
+                    null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+            Log.d(TAG, "Number of quotes loaded = " + data.getCount());
+            mCursor = data;
+
+            // Read from cursor
+            if (mCursor != null && mCursor.getCount() > 0) {
+//            mCursor.moveToFirst();
+                // Move cursor to a random position
+                mIndex = randInt(0, mCursor.getCount() -1);
+                mCursor.moveToPosition(mIndex);
+
+                int idIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
+                String quote = mCursor.getString(idIndex);
+//                mQuoteText = (TextView) findViewById(R.id.quote);
+                // TODO:  Get the cursor from saved fragment
+                mQuoteText.setText(quote);
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+            // Delete reference
+        }
+
+        /**
+         * Defines a default (dummy) share intent to initialize the action provider.
+         * However, as soon as the actual content to be used in the intent
+         * is known or changes, you must update the share intent by again calling
+         * mShareActionProvider.setShareIntent()
+         */
+        private Intent getDefaultIntent() {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/*");
+            intent.putExtra(Intent.EXTRA_TEXT, mQuoteText == null ? "Temp" : mQuoteText.getText() + "\nBy: Harold B. Becker");
+//        intent.putExtra(Intent.EXTRA_TEXT, "Test shareIntent");
+
+            return intent;
+        }
+
+        /**
+         * Returns a pseudo-random number between min and max, inclusive.
+         * The difference between min and max can be at most
+         * <code>Integer.MAX_VALUE - 1</code>.
+         *
+         * @param min Minimum value
+         * @param max Maximum value.  Must be greater than min.
+         * @return Integer between min and max, inclusive.
+         * @see java.util.Random#nextInt(int)
+         */
+        public static int randInt(int min, int max) {
+            // NOTE: Usually this should be a field rather than a method
+            // variable so that it is not re-seeded every call.
+            Random rand = new Random();
+
+            // nextInt is normally exclusive of the top value,
+            // so add 1 to make it inclusive
+            return rand.nextInt((max - min) + 1) + min;
+        }
+
     }
 }
