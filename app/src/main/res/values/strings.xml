@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ilove</string>
+    <string name="app_name">Inspire Love</string>
     <string name="title_section1">Inspirational Quotes</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
@@ -28,9 +28,9 @@
 
     </string-array>
 
-    <string name="title_activity_home">Inspirational Love</string>
+    <string name="title_activity_home">Inspire Love</string>
     <string name="hello_world">No quotes found.</string>
-    <string name="title_activity_about_us">Vision and Mission</string>
+    <string name="title_activity_about_us">About Us</string>
     <string name="vision">The Love Foundation is a global nonprofit organization with the mission of inspiring people to love unconditionally. Our vision is to assist people by building a practical foundation and understanding of unconditional love within individuals and society as a whole.
     \n\nOur programs further the awareness and application of unconditional love through education, research, and charity. Our intention is to explore a variety of creative activities and presentations that enhance unity and self-conscious expression while promoting love and respect to all aspects of life.
 
