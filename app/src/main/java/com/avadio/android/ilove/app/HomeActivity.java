@@ -47,8 +47,8 @@ public class HomeActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-        private static final String TAG = PlaceholderFragment.class.getSimpleName();
+    public class PlaceholderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+        private final String TAG = PlaceholderFragment.class.getSimpleName();
 
         private Cursor mCursor;
         private int mIndex = -1;
@@ -83,6 +83,7 @@ public class HomeActivity extends ActionBarActivity {
                 }
             });
 
+            // Get from the retain fragment
             if (mCursor != null && mIndex != -1) {
                 mCursor.moveToPosition(mIndex);
                 int columnIndex = mCursor.getColumnIndex(QUOTESTABLE.COL_QUOTE);
@@ -112,7 +113,7 @@ public class HomeActivity extends ActionBarActivity {
                 mCursor = cursor;
                 mIndex = mRetainFragment.getIndex();
             } else {
-                this.getActivity().getSupportLoaderManager().initLoader(0, null, this);
+                getSupportLoaderManager().initLoader(0, null, this);
             }
         }
 
@@ -192,6 +193,7 @@ public class HomeActivity extends ActionBarActivity {
 //                mQuoteText = (TextView) findViewById(R.id.quote);
                 // TODO:  Get the cursor from saved fragment
                 mQuoteText.setText(quote);
+                mShareActionProvider.setShareIntent(getDefaultIntent());
             }
         }
 
@@ -225,7 +227,7 @@ public class HomeActivity extends ActionBarActivity {
          * @return Integer between min and max, inclusive.
          * @see java.util.Random#nextInt(int)
          */
-        public static int randInt(int min, int max) {
+        public int randInt(int min, int max) {
             // NOTE: Usually this should be a field rather than a method
             // variable so that it is not re-seeded every call.
             Random rand = new Random();
