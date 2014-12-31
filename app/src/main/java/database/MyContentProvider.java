@@ -9,20 +9,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-import org.apache.http.auth.AUTH;
-
 import java.util.Arrays;
 import java.util.HashSet;
 
 import datamodel.QUOTESTABLE;
 
 public class MyContentProvider extends ContentProvider {
-    public MyContentProvider() {
-    }
-
-    // Database
-    private QuotesDatabaseHelper mQuotesDatabaseHelper;
-
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/quotes";
+    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "quote";
     // Used for the UriMatcher
     private static final int QUOTES = 10;
     private static final int QUOTE_ID = 20;
@@ -31,10 +25,6 @@ public class MyContentProvider extends ContentProvider {
 
     private static final String BASE_PATH = "quotes";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/quotes";
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "quote";
-
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -42,6 +32,11 @@ public class MyContentProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", QUOTE_ID);
     }
 
+    // Database
+    private QuotesDatabaseHelper mQuotesDatabaseHelper;
+
+    public MyContentProvider() {
+    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
