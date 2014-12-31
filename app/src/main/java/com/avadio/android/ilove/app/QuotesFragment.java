@@ -1,18 +1,14 @@
 package com.avadio.android.ilove.app;
 
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -30,7 +26,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -99,6 +94,7 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         // Get the cursor object from retain fragment
         final RetainFragment mRetainFragment = RetainFragment.findOrCreateRetainFragment(this
                 .getFragmentManager());
@@ -109,10 +105,13 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
             mCursor = cursor;
             mIndex = mRetainFragment.getIndex();
         } else {
-            if (!checkDataBase()) {
+            SharedPreferences prefs = getActivity().getSharedPreferences(MyApplication.MY_PREFS_NAME, getActivity().MODE_PRIVATE);
+            final Boolean dataLoaded = prefs.getBoolean("quotesLoaded", false);
+            if (dataLoaded != true) {
                 // Run background task to load data into SQLite Database
                 LoadQuotesTask loadQuotesTask = new LoadQuotesTask();
                 loadQuotesTask.execute();
+                // Set variable to true
             } else {
                 getActivity().getSupportLoaderManager().initLoader(0, null, this);
             }
@@ -214,45 +213,13 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    /**
-     * Check if the database exist
-     *
-     * @return true if it exists, false if it doesn't
-     */
-    private boolean checkDataBase() {
-        File dbFile = getActivity().getDatabasePath("quotes.db");
-        return dbFile.exists();
-    }
-
-    /* Use asyn task to load entries to the sqlite database */
-    private class LoadQuotesTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        public Void doInBackground(Void... params) {
-
-            try {
-                loadQuotes();
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void param) {
-            super.onPostExecute(param);
-            // Update UI
-            getActivity().getSupportLoaderManager().initLoader(0, null, QuotesFragment.this);
-        }
-    }
-
-
     /* Load quots from raw text file */
     private void loadQuotes() throws IOException {
         final Resources resources = getResources();
         InputStream inputStream = resources.openRawResource(R.raw.quotes);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         int count = 0;
-        final int size = 643;
+        final int size = 880;
         ContentValues[] contentValues = new ContentValues[size];
 
         try {
@@ -275,6 +242,9 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
             if (total != size) {
                 Log.e(TAG, "Unexpected total: " + total);
             }
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences(MyApplication.MY_PREFS_NAME, getActivity().MODE_PRIVATE).edit();
+            editor.putBoolean("quotesLoaded", true);
+            editor.commit();
         } finally {
             reader.close();
         }
@@ -316,5 +286,26 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
             startActivity(new Intent(this.getActivity(), DonateWelcomeActivity.class));
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /* Use asyn task to load entries to the sqlite database */
+    private class LoadQuotesTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        public Void doInBackground(Void... params) {
+
+            try {
+                loadQuotes();
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void param) {
+            super.onPostExecute(param);
+            // Update UI
+            getActivity().getSupportLoaderManager().initLoader(0, null, QuotesFragment.this);
+        }
     }
 }

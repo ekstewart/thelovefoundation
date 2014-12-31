@@ -7,15 +7,11 @@ import android.util.Log;
  * Created by ljxi_828 on 5/30/14.
  */
 public class QUOTESTABLE {
-    private static final String TAG = "QUOTETABLE";
-
     // Table and Columns
     public static final String TABLE_QUOTES = "quotes";
     public static final String COL_ID = "_id";
-
     public static final String COL_AUTHOR = "author";
     public static final String COL_QUOTE = "quote";
-
     // Database creation SQL statement
     private static final String DATABASE_CREATE = "create table "
             + TABLE_QUOTES
@@ -24,6 +20,7 @@ public class QUOTESTABLE {
             + COL_AUTHOR + " text not null, "
             + COL_QUOTE + " text not null"
             + ");";
+    private static final String TAG = "QUOTETABLE";
 
     public static void onCreate(SQLiteDatabase database) {
         database.execSQL("DROP TABLE IF EXISTS  " + TABLE_QUOTES);
@@ -31,6 +28,15 @@ public class QUOTESTABLE {
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+//        switch(newVersion) {
+//            case 2:
+//                Log.d(TAG, "Adding Symphony Table");
+//                db.execSQL("SQL_STATEMENT");
+//                break;
+//            default:
+//                throw new IllegalStateException(
+//                        "onUpgrade() with unknown newVersion" + newVersion));
+//        }
         Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS  " + TABLE_QUOTES);
