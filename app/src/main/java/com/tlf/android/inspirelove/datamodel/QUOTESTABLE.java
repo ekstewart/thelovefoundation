@@ -1,4 +1,4 @@
-package datamodel;
+package com.tlf.android.inspirelove.datamodel;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;

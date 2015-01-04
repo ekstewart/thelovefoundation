@@ -1,23 +1,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.avadio.android.ilove.app.HomeActivity">
+    tools:context="com.tlf.android.inspirelove.app.HomeActivity">
 
     <item
         android:id="@+id/action_donate"
-        android:title="@string/action_donate"
         android:orderInCategory="100"
+        android:title="@string/action_donate"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_about"
-        android:title="@string/action_about"
         android:orderInCategory="100"
+        android:title="@string/action_about"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_share"
         android:title="@string/share"
-        app:showAsAction="never"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        app:showAsAction="never" />
 </menu>

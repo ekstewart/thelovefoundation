@@ -1,9 +1,9 @@
-package com.avadio.android.ilove.app;
+package com.tlf.android.inspirelove.app;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 
-import database.QuotesDatabaseHelper;
+import com.tlf.android.inspirelove.database.QuotesDatabaseHelper;
 
 /**
  * Created by ljxi_828 on 6/7/14.

@@ -2,14 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.avadio.android.ilove.app.DonateActivity">
+    tools:context="com.tlf.android.inspirelove.app.DonateActivity">
 
     <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/webView"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        />
+        android:layout_alignParentTop="true" />
 </RelativeLayout>

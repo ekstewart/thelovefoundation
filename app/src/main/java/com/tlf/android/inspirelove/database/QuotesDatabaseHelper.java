@@ -1,13 +1,12 @@
-package database;
+package com.tlf.android.inspirelove.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.avadio.android.ilove.app.MyApplication;
-
-import datamodel.QUOTESTABLE;
+import com.tlf.android.inspirelove.app.MyApplication;
+import com.tlf.android.inspirelove.datamodel.QUOTESTABLE;
 
 /**
  * Created by ljxi_828 on 5/30/14.

@@ -1,11 +1,10 @@
-package com.avadio.android.ilove.app;
+package com.tlf.android.inspirelove.app;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
@@ -13,11 +12,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import org.apache.http.util.EncodingUtils;
-
 
 public class DonateActivity extends ActionBarActivity {
 
+    final Activity activity = this;
     private WebView mWebview;
 
     @Override
@@ -38,7 +36,6 @@ public class DonateActivity extends ActionBarActivity {
 
         mWebview.loadUrl("http://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4GQ5H48YBNW9L");
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,8 +58,6 @@ public class DonateActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    final Activity activity = this;
 
     private class MyWebViewClient extends WebViewClient {
         @Override

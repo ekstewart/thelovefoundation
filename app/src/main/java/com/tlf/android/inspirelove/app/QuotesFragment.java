@@ -1,4 +1,4 @@
-package com.avadio.android.ilove.app;
+package com.tlf.android.inspirelove.app;
 
 
 import android.content.ContentValues;
@@ -25,14 +25,14 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.tlf.android.inspirelove.database.MyContentProvider;
+import com.tlf.android.inspirelove.datamodel.QUOTESTABLE;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
-
-import database.MyContentProvider;
-import datamodel.QUOTESTABLE;
 
 
 /**
@@ -123,7 +123,7 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
         super.onPause();
         // Save the current quote index
 //            SharedPreferences prefs = this.getActivity().getSharedPreferences(
-//                    "com.avadio.android.ilove.app", Context.MODE_PRIVATE);
+//                    "com.tlf.android.inspirelove.app", Context.MODE_PRIVATE);
 //
 //            prefs.edit().putString("quote-text", mQuoteText.getText().toString());
 //            prefs.edit().commit();

@@ -1,4 +1,4 @@
-package database;
+package com.tlf.android.inspirelove.database;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import com.tlf.android.inspirelove.datamodel.QUOTESTABLE;
+
 import java.util.Arrays;
 import java.util.HashSet;
-
-import datamodel.QUOTESTABLE;
 
 public class MyContentProvider extends ContentProvider {
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/quotes";

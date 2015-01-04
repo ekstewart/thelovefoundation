@@ -1,4 +1,4 @@
-package com.avadio.android.ilove.app;
+package com.tlf.android.inspirelove.app;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

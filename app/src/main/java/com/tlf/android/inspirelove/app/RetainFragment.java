@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.avadio.android.ilove.app;
+package com.tlf.android.inspirelove.app;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,21 +65,21 @@ public class RetainFragment extends Fragment {
     }
 
     /**
-     * Store a single object in this Fragment.
-     *
-     * @param object The object to store
-     */
-    public void setObject(Object object) {
-        mObject = object;
-    }
-
-    /**
      * Get the stored object.
      *
      * @return The stored object
      */
     public Object getObject() {
         return mObject;
+    }
+
+    /**
+     * Store a single object in this Fragment.
+     *
+     * @param object The object to store
+     */
+    public void setObject(Object object) {
+        mObject = object;
     }
 
     public int getIndex() {
