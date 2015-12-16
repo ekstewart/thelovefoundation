@@ -7,7 +7,6 @@
     <application
         android:name="com.tlf.android.inspirelove.app.MyApplication"
         android:allowBackup="true"
-        android:debuggable="false"
         android:icon="@drawable/inspiringlove_app_icon_heart"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light">
