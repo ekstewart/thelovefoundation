@@ -282,9 +282,9 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
         if (id == R.id.action_about) {
             startActivity(new Intent(this.getActivity(), AboutUsActivity.class));
         }
-        if (id == R.id.action_donate) {
-            startActivity(new Intent(this.getActivity(), DonateWelcomeActivity.class));
-        }
+//        if (id == R.id.action_donate) {
+//            startActivity(new Intent(this.getActivity(), DonateWelcomeActivity.class));
+//        }
         return super.onOptionsItemSelected(item);
     }
 
