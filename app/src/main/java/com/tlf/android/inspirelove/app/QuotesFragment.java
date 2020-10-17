@@ -106,8 +106,8 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
             mIndex = mRetainFragment.getIndex();
         } else {
             SharedPreferences prefs = getActivity().getSharedPreferences(MyApplication.MY_PREFS_NAME, getActivity().MODE_PRIVATE);
-            final Boolean dataLoaded = prefs.getBoolean("quotesLoaded", false);
-            if (dataLoaded != true) {
+            final boolean dataLoaded = prefs.getBoolean("quotesLoaded", false);
+            if (!dataLoaded) {
                 // Run background task to load data into SQLite Database
                 LoadQuotesTask loadQuotesTask = new LoadQuotesTask();
                 loadQuotesTask.execute();
@@ -219,22 +219,17 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
         InputStream inputStream = resources.openRawResource(R.raw.quotes);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         int count = 0;
-        final int size = 880;
+        final int size = 2083;
         ContentValues[] contentValues = new ContentValues[size];
 
         try {
             String line;
             while ((line = reader.readLine()) != null) {
-//                Uri uri;
                 if (!line.equals("") && !line.startsWith("Quotes by")) {
                     contentValues[count] = new ContentValues();
                     contentValues[count].put("quote", line.trim());
-                    contentValues[count].put("author", "Harold B. Becker");
+                    contentValues[count].put("author", "Harold W. Becker");
                     count++;
-//                    uri = addQuote(line.trim());
-//                    if (uri.getLastPathSegment().equals("")) {
-//                        Log.e(TAG, "unable to add quote: " + line.trim());
-//                    }
                 }
             }
 
@@ -254,7 +249,7 @@ public class QuotesFragment extends Fragment implements LoaderManager.LoaderCall
     public Uri addQuote(String quote) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("quote", quote);
-        contentValues.put("author", "Harold B. Becker");
+        contentValues.put("author", "Harold W. Becker");
 
         return getActivity().getContentResolver().insert(MyContentProvider.CONTENT_URI, contentValues);
     }
